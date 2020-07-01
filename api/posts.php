@@ -1,22 +1,27 @@
 <?php
 require_once(dirname(__DIR__)."/api/api.php");
 require_once(dirname(__DIR__)."/api/error.php");
+require_once(dirname(__DIR__)."/api/stats.php");
 
 class posts extends Handler {
-	function __construct($conn)
-	{
-		$this->conn = $conn;
-		$this->list = array();
-	}
-	
 	function resolve($ctx){
-		switch($ctx->params[0]){
+		switch($ctx->params[$this->start]){
 			case "posts":
 				return json_encode($this->show_posts(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 			break;
 			case "post":
-				if(count($ctx->params)>1){
-					return json_encode(($this->show_post($ctx->params[1])), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+				if(count($ctx->params)>$this->start+2){
+					switch($ctx->params[$this->start+2]){
+						case "stats":
+							$stats = new stats($this->conn, $this->start+2, $this->get_post($ctx->params[$this->start+1])['PostId']);
+							return $stats->resolve($ctx);
+						break;
+						default:
+							return generic_error(UNKNOWN_REQUEST);
+					}
+				}
+				if(count($ctx->params)==$this->start+2){
+					return json_encode(($this->show_post($ctx->params[$this->start+1])), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 				}
 				return generic_error(UNKNOWN_REQUEST);
 			default:
@@ -36,12 +41,15 @@ class posts extends Handler {
 		return $resultobject;
 	}
 	
-	function show_post($id){
+	function get_post($id){
 		$result = $this->conn->query("SELECT * FROM blog WHERE Hidden = 0 AND ".(ctype_digit($id)?"PostId = $id":"Url = \"".$this->conn->escape_string($id)."\""));
 		if(!$result){
 			specific_error(SERVER_ERROR, $result->error);
 		}
 		return $result->fetch_assoc();
+	}
+	function show_post($id){
+		return $this->get_post($id);
 	}
 }
 ?>

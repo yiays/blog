@@ -18,17 +18,44 @@ h1{
 	font-size: 3rem;
 }
 header{
-	background: #fff;
-	color: #000;
+	position: relative;
 	padding: 1rem;
 }
 header>a{
 	text-decoration: none;
-	color: #000;
+	color: #fff;
 }
 header>a>h1{
 	margin: 0;
 	display: inline;
+}
+header>.views{
+	display: flex;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	flex-direction: row-reverse;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	filter: blur(5px);
+	pointer-events: none;
+}
+header>.views::before{
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	height: 1px;
+	background: #fff;
+}
+header>.views>span{
+	position: absolute;
+	background: #aaa;
+	border-radius: 50%;
 }
 
 #gallery{
@@ -43,25 +70,51 @@ header>a>h1{
 		"s1 s2 t5 t6"
 		"s1 s2 t5 t6"
 		"s1 s2 t5 t6";
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-	width: 100vw;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(9, 1fr);
+	gap: 1rem;
+	padding: 1rem;
+	box-sizing: border-box;
+	background: #fff;
+	width: 100%;
+	max-width: 160rem;
+	margin: 0 auto;
 	height: 100vh;
 	height: calc(100vh - 5rem);
+	min-height: 50rem;
+	max-height: 90rem;
+}
+@media screen and (max-width: 80rem){
+	#gallery{
+		grid:
+			"p p p s1 s1 s1"
+			"p p p s2 s2 s2"
+			"t1 t1 t2 t2 t3 t3"
+			"t4 t4 t5 t5 t6 t6"
+		;
+		grid-template-columns: repeat(6, 1fr);
+		grid-template-rows: repeat(4, 1fr);
+	}
+}
+@media screen and (max-width: 40rem){
+	#gallery{
+		grid:
+			"p p"
+			"p p"
+			"s1 s1"
+			"s2 s2"
+			"t1 t2"
+			"t3 t4"
+			"t5 t6"
+		;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(7, 1fr);
+		min-height: 80rem;
+	}
 }
 #gallery>a{
 	position: relative;
 	overflow: hidden;
-}
-#gallery>a::after{
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 2;
-	box-shadow: inset 0 0 100px #000;
 }
 #gallery>a>.splash{
 	position: absolute;
@@ -74,11 +127,13 @@ header>a>h1{
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+#gallery>a>img,#gallery>a>.splash{
 	transform: scale(1);
 	transition: 250ms transform;
 	z-index: 1;
 }
-#gallery>a:hover>img, #gallery>a:focus>img{
+#gallery>a:hover>img, #gallery>a:focus>img, #gallery>a:hover>.splash, #gallery>a:focus>.splash{
 	transform: scale(1.1);
 }
 #gallery>a>.meta{
@@ -87,16 +142,18 @@ header>a>h1{
 	left: 0;
 	right: 0;
 	padding: 0.5rem;
+	box-shadow: 0 0 0rem rgba(0,0,0,0.5);
 	color: #fff;
 	transform: translateY(100%);
 	z-index: 3;
-	transition: 250ms transform;
+	transition: 250ms transform, 250ms box-shadow;
 }
 #gallery>a>.meta>b{
 	font-size: 2rem;
 }
 #gallery>a:hover>.meta, #gallery>a:focus>.meta{
 	transform: translateY(0%);
+	box-shadow: 0 0 1rem rgba(0,0,0,0.5);
 }
 #gallery>a:first-child{
 	grid-area: p;
