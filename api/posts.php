@@ -58,7 +58,9 @@ class posts extends Handler {
 		if(!$result){
 			specific_error(SERVER_ERROR, $result->error);
 		}
-		return $result->fetch_assoc();
+		$result = $result->fetch_assoc();
+		$result['Related'] = []; // TODO: Populate this.
+		return $result;
 	}
 	function show_post($id){
 		return $this->get_post($id);

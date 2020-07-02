@@ -11,7 +11,7 @@ html,body{
 h1,h2,h3,h4,h5,h6{
 	line-height: 1;
 	margin: 0;
-	margin-bottom: 0.2em;
+	margin-bottom: .2em;
 }
 h1{
 	font-weight: 200;
@@ -24,7 +24,7 @@ a:hover{
 	color: #fff;
 }
 blockquote{
-	border-left: solid #666 0.2rem;
+	border-left: solid #666 .2rem;
 	margin: 0;
 	padding: 0 1rem 0 2rem;
 }
@@ -157,8 +157,8 @@ header>a>h1{
 	bottom: 0;
 	left: 0;
 	right: 0;
-	padding: 0.5rem;
-	box-shadow: 0 0 0rem rgba(0,0,0,0.5);
+	padding: .5rem;
+	box-shadow: 0 0 0rem rgba(0,0,0,.5);
 	color: #fff;
 	transform: translateY(100%);
 	z-index: 3;
@@ -169,7 +169,7 @@ header>a>h1{
 }
 #gallery>a:hover>.meta, #gallery>a:focus>.meta{
 	transform: translateY(0%);
-	box-shadow: 0 0 1rem rgba(0,0,0,0.5);
+	box-shadow: 0 0 1rem rgba(0,0,0,.5);
 }
 #gallery>a:first-child{
 	grid-area: p;
@@ -235,14 +235,16 @@ header>a>h1{
 
 .post-grid>.post{
 	grid-area: post;
-	box-shadow: 0 0 0.5rem rgba(0,0,0,0.5);
+}
+.post{
+	box-shadow: 0 0 .5rem rgba(0,0,0,.5);
 }
 .post>.post-header{
 	position: relative;
 	background: linear-gradient(-45deg, black, transparent 50%);
 	color: #fff;
 	padding: 1rem;
-	padding-bottom: 0.5rem;
+	padding-bottom: .5rem;
 	overflow: hidden;
 }
 .post>.post-header>.tags{
@@ -257,7 +259,7 @@ header>a>h1{
 	background: #eee;
 	color: #000;
 	padding: 1rem;
-	margin-top: -0.3rem;
+	margin-top: -.3rem;
 }
 .post>.post-body>*:first-child{
 	margin-top: 0;
@@ -273,19 +275,74 @@ header>a>h1{
 }
 .post>.post-footer{
 	min-height: 1rem;
-	padding: 0.5rem;
+	padding: .5rem;
 }
 
 .post-grid>#comments{
 	grid-area: comments;
+}
+#comments{
 	padding: 1rem;
+}
+.comment-feed{
+	display: flex;
+	flex-direction: row;
+}
+.comment{
+	position: relative;
+	padding: 1rem;
+	width: 100%;
+}
+.comment a{
+	color: #003;
+}
+.comment a:hover{
+	color: #333;
+}
+.comment>img{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	box-shadow: 0 0 .5rem rgba(0,0,0,.5);
+}
+.comment>.comment-body{
+	position: absolute;
+	top: 0;
+	left: 3.5rem;
+	right: 0;
+	min-height: 1.6rem;
+	padding: 0.7rem;
+	background: #eee;
+	color: #000;
+	border-radius: .5rem .5rem .5rem 0;
+}
+.comment>.comment-body::before{
+	content: "";
+	position: absolute;
+	top: 2.6rem;
+	left: -0.4rem;
+	width: 0;
+	height: 0;
+	border: .4rem solid transparent;
+	border-right-color: #eee;
+	border-bottom: 0;
+	border-left: 0;
+}
+.comment>.comment-body>.comment-meta{
+	font-size: 0.8rem;
+	color: #333;
 }
 
 .post-grid>#related{
 	grid-area: related;
+}
+#related{
 	padding: 1rem;
 }
-.post-grid>#related>#gallery{
+#related>#gallery{
 	background: none;
 	padding: 0;
 	grid-template-areas:
@@ -294,14 +351,14 @@ header>a>h1{
 	grid-template-rows: auto;
 	width: calc(100% + 2rem);
 	height: 15rem;
-	margin: 0.5rem -1rem;
+	margin: .5rem -1rem;
 	min-height: unset;
 	max-height: unset;
 	min-width: unset;
 	max-width: unset;
 }
 @media screen and (min-width: 120rem){
-	.post-grid>#related>#gallery{
+	#related>#gallery{
 		grid-template-areas:
 			"p"
 			"s1"
@@ -314,7 +371,7 @@ header>a>h1{
 	}
 }
 @media screen and (max-width: 40rem){
-	.post-grid>#related>#gallery{
+	#related>#gallery{
 		grid-template-areas:
 			"p"
 			"s1"
@@ -325,6 +382,6 @@ header>a>h1{
 		height: 45rem;
 	}
 }
-.post-grid>#related>#gallery>.post-preview{
-	box-shadow: 0 0 0.5rem rgba(0,0,0,0.5);
+#related>#gallery>.post-preview{
+	box-shadow: 0 0 .5rem rgba(0,0,0,.5);
 }

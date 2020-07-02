@@ -21,7 +21,7 @@ if(isset($_GET['post'])){
 	<link rel="stylesheet" href="https://cdn.yiays.com/normalize.css">
 	
 	<link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,200;0,400;0,700;1,200;1,400&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="/css/blog.css?v=78">
+	<link rel="stylesheet" href="/css/blog.css?v=83">
 </head>
 <body>
 	<header>
@@ -57,7 +57,7 @@ if(isset($_GET['post'])){
 		// Decode and present tags
 		$tags = [];
 		foreach(explode(", ", $post['Tags']) as $tag){
-			$tags[] = "<a href=\"/tag/".urlencode(strtolower($tag))."\">$tag</a>";
+			$tags[] = "<a href=\"/tag/".urlencode(strtolower($tag))."\">#$tag</a>";
 		}
 		$tags = implode(", ", $tags);
 		
@@ -81,15 +81,31 @@ if(isset($_GET['post'])){
 				<div class=\"post-body\">
 					$content
 				</div>
-				<div class=\"post-footer\">
-					
-				</div>
+				<!--<div class=\"post-footer\"></div>-->
 			</div>
 		";
 			
 		echo "
 			<div id=\"comments\">
 				<h2>Comments</h2>
+				<div class=\"comment-feed\">
+					<div class=\"comment\" data-id=\"1\">
+						<img src=\"https://yiays.com/img/pfp.jpg\"/>
+						<div class=\"comment-body\">
+							This is a test comment
+							<div class=\"comment-meta\"> - <a href=\"/user/yiays\">yiays</a> | <a>Reply</a></div>
+						</div>
+						<!--<div class=\"comment-replies\">
+							<div class=\"reply\">
+								<img src=\"https://yiays.com/img/pfp.jpg\"/>
+								<div class=\"reply-body\">
+									This is a reply to a test comment
+									<div class=\"reply-meta\"> - <a href=\"/user/yiays\">yiays</a></div>
+								</div>
+							</div>
+						</div>-->
+					</div>
+				</div>
 			</div>
 			<div id=\"related\">
 				<h2>Related articles</h2>
