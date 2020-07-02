@@ -21,7 +21,14 @@ class stats extends Handler {
 	}
 	
 	function show_views(){
-		$result = $this->conn->query("SELECT DATE(ViewTime),COUNT(*) FROM viewers".($this->postId?" WHERE PostId = $this->postId":'')." GROUP BY DATE(ViewTime) ORDER BY ViewTime DESC");
+		$result = $this->conn->query(
+			"SELECT DATE(ViewTime),COUNT(*)
+			FROM viewers
+			".($this->postId?" WHERE PostId = $this->postId":'')."
+			GROUP BY DATE(ViewTime)
+			ORDER BY ViewTime DESC
+			LIMIT 365"
+		);
 		if(!$result){
 			specific_error(SERVER_ERROR, $result->error);
 		}

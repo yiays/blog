@@ -30,7 +30,13 @@ class posts extends Handler {
 	}
 	
 	function show_posts(){
-		$result = $this->conn->query("SELECT * FROM blog WHERE Hidden = 0 ORDER BY PostID DESC");
+		$result = $this->conn->query(
+			"SELECT PostID,auth.Username AS Author,Title,Url,Date,Tags,Cover,Colour
+			FROM blog
+				LEFT JOIN auth ON blog.UserID = auth.UserID
+			WHERE Hidden = 0
+			ORDER BY PostID DESC"
+		);
 		if(!$result){
 			specific_error(SERVER_ERROR, $result->error);
 		}
@@ -42,7 +48,13 @@ class posts extends Handler {
 	}
 	
 	function get_post($id){
-		$result = $this->conn->query("SELECT * FROM blog WHERE Hidden = 0 AND ".(ctype_digit($id)?"PostId = $id":"Url = \"".$this->conn->escape_string($id)."\""));
+		$result = $this->conn->query(
+			"SELECT blog.*,auth.Username AS Author
+			FROM blog
+				LEFT JOIN auth ON blog.UserID = auth.UserID
+			WHERE Hidden = 0
+				AND ".(ctype_digit($id)?"PostId = $id":"Url = \"".$this->conn->escape_string($id)."\"")
+		);
 		if(!$result){
 			specific_error(SERVER_ERROR, $result->error);
 		}
