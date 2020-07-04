@@ -1,6 +1,6 @@
 <?php
-require('api/api.php');
-require('includes/Parsedown.php');
+require_once('api/api.php');
+require_once('includes/Parsedown.php');
 define('SPLASH_COLOURS', [0x55efc4,0x81ecec,0x74b9ff,0xa29bfe,0x636e72]);
 
 $post = null;
