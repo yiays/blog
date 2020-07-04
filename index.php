@@ -63,6 +63,7 @@ if(isset($_GET['post'])){
 		
 		// Decode content
 		$Parsedown = new Parsedown();
+		$Parsedown->setSafeMode(true); // TODO: disable if the author is trusted.
 		$content = $Parsedown->text($post['Content']);
 		
 		echo "

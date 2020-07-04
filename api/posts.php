@@ -2,6 +2,7 @@
 require_once(dirname(__DIR__)."/api/api.php");
 require_once(dirname(__DIR__)."/api/error.php");
 require_once(dirname(__DIR__)."/api/stats.php");
+require_once(dirname(__DIR__)."/includes/Parsedown.php");
 
 class posts extends Handler {
 	function resolve($ctx){
@@ -31,17 +32,22 @@ class posts extends Handler {
 	
 	function show_posts(){
 		$result = $this->conn->query(
-			"SELECT PostID,auth.Username AS Author,Title,Url,Date,Tags,Cover,Colour
+			"SELECT PostID,auth.Username AS Author,Content AS Preview,Title,Url,Date,Tags,Cover,Colour
 			FROM blog
 				LEFT JOIN auth ON blog.UserID = auth.UserID
 			WHERE Hidden = 0
 			ORDER BY PostID DESC"
 		);
 		if(!$result){
-			specific_error(SERVER_ERROR, $result->error);
+			specific_error(SERVER_ERROR, $this->conn->error);
 		}
+		
+		$Parsedown = new Parsedown();
+		
 		$resultobject = [];
 		while($row = $result->fetch_assoc()){
+			$preview = strip_tags($Parsedown->text($row['Preview']));
+			$row['Preview'] = (strlen($preview)>128?substr($preview,0,128).'...':$preview);
 			$resultobject[] = $row;
 		}
 		return $resultobject;
@@ -49,14 +55,23 @@ class posts extends Handler {
 	
 	function get_post($id){
 		$result = $this->conn->query(
-			"SELECT blog.*,auth.Username AS Author
+			"SELECT
+				blog.*,
+				auth.Username AS Author,
+				COUNT(likers.UserID) AS Likes,
+				COUNT(dislikers.UserID) AS Dislikes,
+				COUNT(comments.CommentID) AS Comments
 			FROM blog
 				LEFT JOIN auth ON blog.UserID = auth.UserID
-			WHERE Hidden = 0
-				AND ".(ctype_digit($id)?"PostId = $id":"Url = \"".$this->conn->escape_string($id)."\"")
+				LEFT JOIN likers ON likers.PostID=blog.PostID
+				LEFT JOIN dislikers ON dislikers.PostID=blog.PostID
+				LEFT JOIN comments ON comments.PostID=blog.PostID
+			WHERE
+				blog.Hidden = 0
+				AND ".(ctype_digit($id)?"blog.PostId = $id":"blog.Url = \"".$this->conn->escape_string($id)."\"")
 		);
 		if(!$result){
-			specific_error(SERVER_ERROR, $result->error);
+			specific_error(SERVER_ERROR, $this->conn->error);
 		}
 		$result = $result->fetch_assoc();
 		$result['Related'] = []; // TODO: Populate this.

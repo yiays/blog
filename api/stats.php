@@ -30,7 +30,7 @@ class stats extends Handler {
 			LIMIT 365"
 		);
 		if(!$result){
-			specific_error(SERVER_ERROR, $result->error);
+			specific_error(SERVER_ERROR, $this->conn->error);
 		}
 		$resultobject = [];
 		while($row = $result->fetch_row()){
