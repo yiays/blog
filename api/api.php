@@ -74,7 +74,7 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
 				$_SESSION['account'] = serialize($account);
 			break;*/
 			default:
-				generic_error(UNKNOWN_REQUEST);
+				print(generic_error(UNKNOWN_REQUEST));
 		}
 	}else{
 		print(json_encode(['desc'=>"Welcome to the blog.yiays.com API!",

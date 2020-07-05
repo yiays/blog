@@ -32,21 +32,22 @@ class posts extends Handler {
 	
 	function show_posts(){
 		$result = $this->conn->query(
-			"SELECT PostID,auth.Username AS Author,Content AS Preview,Title,Url,Date,Tags,Cover,Colour
+			"SELECT PostID,auth.Username AS Author,Content,Title,Url,Date,Tags,Cover,Colour
 			FROM blog
 				LEFT JOIN auth ON blog.UserID = auth.UserID
 			WHERE Hidden = 0
 			ORDER BY PostID DESC"
 		);
 		if(!$result){
-			specific_error(SERVER_ERROR, $this->conn->error);
+			return specific_error(SERVER_ERROR, $this->conn->error);
 		}
 		
 		$Parsedown = new Parsedown();
 		
 		$resultobject = [];
 		while($row = $result->fetch_assoc()){
-			$preview = strip_tags($Parsedown->text($row['Preview']));
+			$preview = strip_tags($Parsedown->text($row['Content']));
+			unset($row['Content']);
 			$row['Preview'] = (strlen($preview)>128?substr($preview,0,128).'...':$preview);
 			$resultobject[] = $row;
 		}
@@ -71,11 +72,19 @@ class posts extends Handler {
 				AND ".(ctype_digit($id)?"blog.PostId = $id":"blog.Url = \"".$this->conn->escape_string($id)."\"")
 		);
 		if(!$result){
-			specific_error(SERVER_ERROR, $this->conn->error);
+			return specific_error(SERVER_ERROR, $this->conn->error);
 		}
-		$result = $result->fetch_assoc();
-		$result['Related'] = []; // TODO: Populate this.
-		return $result;
+		$row = $result->fetch_assoc();
+		if(is_null($row['PostID'])) return [];
+		
+		$Parsedown = new Parsedown();
+		
+		$preview = strip_tags($Parsedown->text($row['Content']));
+		$row['Preview'] = (strlen($preview)>128?substr($preview,0,128).'...':$preview);
+		
+		$row['Related'] = []; // TODO: Populate this.
+		
+		return $row;
 	}
 	function show_post($id){
 		return $this->get_post($id);

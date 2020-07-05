@@ -31,6 +31,9 @@ blockquote{
 img{
 	max-width: 100%;
 }
+.wrapper{
+	padding: 10vw;
+}
 
 header{
 	position: relative;
