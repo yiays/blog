@@ -59,8 +59,8 @@ header>a>h1{
 	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: center;
-	filter: blur(5px);
 	pointer-events: none;
+	overflow: hidden;
 }
 .view-histogram::before{
 	content: "";
@@ -69,12 +69,15 @@ header>a>h1{
 	right: 0;
 	top: 50%;
 	height: 1px;
-	background: #fff;
+	background: linear-gradient(90deg, transparent, white);
 }
 .view-histogram>span{
 	position: absolute;
-	background: #aaa;
+	background: #fff;
+	background-clip: content-box;
 	border-radius: 50%;
+	border: 3px solid rgba(255,255,255,0.5);
+	opacity: 0.5;
 }
 
 #gallery{

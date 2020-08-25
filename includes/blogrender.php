@@ -6,8 +6,8 @@ require_once('api/api.php');
 
 function print_view_histogram($stats){
 	foreach($stats as $date=>$count){
-		$dayssince = round((time() - strtotime($date)) / (60 * 60 * 24));
-		$scaledcount = round(16*log($count,10))+4;
+		$dayssince = round((time() - strtotime($date)) / (60 * 60 * 24))*4-8;
+		$scaledcount = round(8*log($count,10))+4;
 		echo "<span style=\"width:{$scaledcount}px;height:{$scaledcount}px;right:{$dayssince}px\"></span>";
 	}
 }
@@ -20,12 +20,19 @@ function print_post_previews($posts, $cap){
 		$postdate = new DateTime($post['Date']);
 		$postdate = $postdate->format("M d, Y");
 		
+		// Decode tags
+		$tags = [];
+		foreach(explode(", ", $post['Tags']) as $tag){
+			$tags[] = "#$tag";
+		}
+		$tags = implode(", ", $tags);
+		
 		echo "
 		<a href=\"/$post[Url]\" class=\"post-preview\">
 			<img src=\"https://cdn.yiays.com/blog/$post[Cover]\">
 			<div class=\"meta\" style=\"background:#$post[Colour];\">
 				<b>$post[Title]</b><br>
-				by $post[Author] on $postdate | <i>$post[Tags]</i>
+				by $post[Author] on $postdate | <i>$tags</i>
 			</div>
 		</a>";
 		if($count >= $cap) break;

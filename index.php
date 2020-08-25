@@ -2,7 +2,8 @@
 require_once('api/api.php');
 require_once('includes/blogrender.php');
 
-$params = array_splice(explode('/', $_SERVER['REQUEST_URI']), 1);
+$params = explode('/', $_SERVER['REQUEST_URI']);
+$params = array_splice($params, 1);
 
 if(strlen($params[0])){
 	switch($params[0]){

@@ -75,7 +75,7 @@ class posts extends Handler {
 			return specific_error(SERVER_ERROR, $this->conn->error);
 		}
 		$row = $result->fetch_assoc();
-		if(is_null($row['PostID'])) return [];
+		if(is_null($row['PostID'])) return []; // COUNT means there is one row regardless of if the post exists or not
 		
 		$Parsedown = new Parsedown();
 		
@@ -83,6 +83,10 @@ class posts extends Handler {
 		$row['Preview'] = (strlen($preview)>128?substr($preview,0,128).'...':$preview);
 		
 		$row['Related'] = []; // TODO: Populate this.
+		
+		// Record this successful request as a view
+		if(!$this->conn->query("INSERT INTO viewers(POSTID) VALUES($row[PostID])"))
+			return specific_error(SERVER_ERROR, "Failed to count view; ".$this->conn->error);
 		
 		return $row;
 	}
