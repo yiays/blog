@@ -33,8 +33,8 @@ class posts extends Handler {
 	function show_posts(){
 		$result = $this->conn->query(
 			"SELECT PostID,auth.Username AS Author,Content,Title,Url,Date,Tags,Cover,Colour
-			FROM blog
-				LEFT JOIN auth ON blog.UserID = auth.UserID
+			FROM post
+				LEFT JOIN auth ON post.UserID = auth.UserID
 			WHERE Hidden = 0
 			ORDER BY PostID DESC"
 		);
@@ -57,19 +57,19 @@ class posts extends Handler {
 	function get_post($id){
 		$result = $this->conn->query(
 			"SELECT
-				blog.*,
+				post.*,
 				auth.Username AS Author,
 				COUNT(likers.UserID) AS Likes,
 				COUNT(dislikers.UserID) AS Dislikes,
 				COUNT(comments.CommentID) AS Comments
-			FROM blog
-				LEFT JOIN auth ON blog.UserID = auth.UserID
-				LEFT JOIN likers ON likers.PostID=blog.PostID
-				LEFT JOIN dislikers ON dislikers.PostID=blog.PostID
-				LEFT JOIN comments ON comments.PostID=blog.PostID
+			FROM post
+				LEFT JOIN auth ON post.UserID = auth.UserID
+				LEFT JOIN likers ON likers.PostID=post.PostID
+				LEFT JOIN dislikers ON dislikers.PostID=post.PostID
+				LEFT JOIN comments ON comments.PostID=post.PostID
 			WHERE
-				blog.Hidden = 0
-				AND ".(ctype_digit($id)?"blog.PostId = $id":"blog.Url = \"".$this->conn->escape_string($id)."\"")
+				post.Hidden = 0
+				AND ".(ctype_digit($id)?"post.PostId = $id":"post.Url = \"".$this->conn->escape_string($id)."\"")
 		);
 		if(!$result){
 			return specific_error(SERVER_ERROR, $this->conn->error);
