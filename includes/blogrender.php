@@ -3,10 +3,16 @@ define('SPLASH_COLOURS', [0x55efc4,0x81ecec,0x74b9ff,0xa29bfe,0x636e72]);
 require_once('includes/Parsedown.php');
 require_once('api/api.php');
 
+function ywtodate($yw) {
+	$date = new DateTime();
+	$date->setISODate(intval(substr($yw, 0, 4)), intval(substr($yw, 5)));
+	if($date) return $date->getTimestamp();
+	else return 0;
+}
 
 function print_view_histogram($stats){
-	foreach($stats as $date=>$count){
-		$dayssince = round((time() - strtotime($date)) / (60 * 60 * 24))*4-8;
+	foreach($stats as $week=>$count){
+		$dayssince = round((time() - ywtodate($week)) / (60 * 60 * 24))*3-8;
 		$scaledcount = round(8*log($count,10))+4;
 		echo "<span style=\"width:{$scaledcount}px;height:{$scaledcount}px;right:{$dayssince}px\"></span>";
 	}
@@ -71,7 +77,7 @@ function print_post($post, $conn){
 	$content = $Parsedown->text($post['Content']);
 	
 	echo "
-		<div class=\"post\" data-id=\"$post[PostID]\">
+		<div class=\"post\" data-id=\"$post[PostID]\" style=\"--accent: #$post[Colour];\">
 			<div class=\"post-header\">
 				<div class=\"content\">
 					<h2>$post[Title]</h2>
@@ -82,7 +88,7 @@ function print_post($post, $conn){
 					print_view_histogram($stats->show_views());
 	echo "</div>
 			</div>
-			<img class=\"post-image\" src=\"https://cdn.yiays.com/blog/$post[Cover]\"/>
+			<img class=\"post-image\" src=\"https://cdn.yiays.com/blog/$post[Cover]\" alt=\"".addslashes($post['Title'])."\"/>
 			<div class=\"post-body\">
 				$content
 			</div>
@@ -92,16 +98,16 @@ function print_post($post, $conn){
 }
 function print_post_comments(){
 	echo "
-		<div id=\"comments\">
+		<!--<div id=\"comments\">
 			<h2>Comments</h2>
 			<div class=\"comment-feed\">
 				<div class=\"comment\" data-id=\"1\">
-					<img src=\"https://yiays.com/img/pfp.jpg\"/>
+					<img src=\"https://yiays.com/img/pfp.jpg\" alt=\"Yiays profile picture\"/>
 					<div class=\"comment-body\">
 						This is a test comment
 						<div class=\"comment-meta\"> - <a href=\"/user/yiays\">yiays</a> | <a>Reply</a></div>
 					</div>
-					<!--<div class=\"comment-replies\">
+					<div class=\"comment-replies\">
 						<div class=\"reply\">
 							<img src=\"https://yiays.com/img/pfp.jpg\"/>
 							<div class=\"reply-body\">
@@ -109,21 +115,21 @@ function print_post_comments(){
 								<div class=\"reply-meta\"> - <a href=\"/user/yiays\">yiays</a></div>
 							</div>
 						</div>
-					</div>-->
+					</div>
 				</div>
 			</div>
-		</div>
+		</div>-->
 	";
 }
 function print_post_related($related){
 	echo "
-		<div id=\"related\">
+		<!--<div id=\"related\">
 			<h2>Related articles</h2>
 			<div id=\"gallery\">";
 				print_post_previews($related, 3);
 				echo "
 			</div>
-		</div>
+		</div>-->
 	";
 }
 ?>

@@ -22,12 +22,12 @@ class stats extends Handler {
 	
 	function show_views(){
 		$result = $this->conn->query(
-			"SELECT DATE(ViewTime),COUNT(*)
+			"SELECT CONCAT(YEAR(ViewTime), '/', WEEK(ViewTime)), COUNT(*)
 			FROM viewers
 			".($this->postId?" WHERE PostId = $this->postId":'')."
-			GROUP BY DATE(ViewTime)
+			GROUP BY CONCAT(YEAR(ViewTime), '/', WEEK(ViewTime))
 			ORDER BY ViewTime DESC
-			LIMIT 365"
+			LIMIT 52"
 		);
 		if(!$result){
 			return specific_error(SERVER_ERROR, $this->conn->error);

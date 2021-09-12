@@ -11,11 +11,12 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
 	<link rel="manifest" href="/site.webmanifest">
+		<meta name="theme-color" content="#000000">
 	
 	<link rel="stylesheet" href="https://cdn.yiays.com/normalize.css">
 	
 	<link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,200;0,400;0,700;1,200;1,400&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="/css/blog.css?v=90">
+	<link rel="stylesheet" href="/css/blog.css?v=94">
 </head>
 <body>
 	<header>
