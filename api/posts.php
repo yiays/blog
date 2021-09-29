@@ -32,9 +32,9 @@ class posts extends Handler {
 	
 	function show_posts(){
 		$result = $this->conn->query(
-			"SELECT PostID,auth.Username AS Author,Content,Title,Url,Date,Tags,Cover,Colour
+			"SELECT PostID,passport.user.Username AS Author,Content,Title,Url,Date,Tags,Cover,Colour
 			FROM post
-				LEFT JOIN auth ON post.UserID = auth.UserID
+				LEFT JOIN passport.user ON post.UserID = passport.user.Id
 			WHERE Hidden = 0
 			ORDER BY PostID DESC"
 		);
@@ -58,12 +58,12 @@ class posts extends Handler {
 		$result = $this->conn->query(
 			"SELECT
 				post.*,
-				auth.Username AS Author,
+				passport.user.Username AS Author,
 				COUNT(likers.UserID) AS Likes,
 				COUNT(dislikers.UserID) AS Dislikes,
 				COUNT(comments.CommentID) AS Comments
 			FROM post
-				LEFT JOIN auth ON post.UserID = auth.UserID
+				LEFT JOIN passport.user ON post.UserID = passport.user.Id
 				LEFT JOIN likers ON likers.PostID=post.PostID
 				LEFT JOIN dislikers ON dislikers.PostID=post.PostID
 				LEFT JOIN comments ON comments.PostID=post.PostID
