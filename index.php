@@ -2,7 +2,9 @@
 require_once('api/api.php');
 require_once('includes/blogrender.php');
 
-$params = explode('/', $_SERVER['REQUEST_URI']);
+$params = strstr($_SERVER['REQUEST_URI'], '?', true);
+if(!$params) $params = $_SERVER['REQUEST_URI'];
+$params = explode('/', $params);
 $params = array_splice($params, 1);
 
 if(strlen($params[0])){
@@ -14,6 +16,11 @@ if(strlen($params[0])){
 			
 		break;
 		default:
+			if(!isset($_GET['old'])) {
+				header("Location: https://yiays.com/blog/$params[0]");
+				die();
+			}
+			
 			$posts = new posts($conn);
 			$post = $posts->get_post($params[0]);
 			

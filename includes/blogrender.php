@@ -34,7 +34,7 @@ function print_post_previews($posts, $cap){
 		$tags = implode(", ", $tags);
 		
 		echo "
-		<a href=\"/$post[Url]\" class=\"post-preview\">
+		<a href=\"//yiays.com/blog/$post[Url]\" class=\"post-preview\">
 			<img src=\"https://cdn.yiays.com/blog/$post[Cover]\">
 			<div class=\"meta\" style=\"background:#$post[Colour];\">
 				<b>$post[Title]</b><br>
@@ -73,7 +73,7 @@ function print_post($post, $conn){
 	
 	// Decode content
 	$Parsedown = new Parsedown();
-	$Parsedown->setSafeMode(true); // TODO: disable if the author is trusted.
+	//$Parsedown->setSafeMode(true); // TODO: disable if the author is trusted.
 	$content = $Parsedown->text($post['Content']);
 	
 	echo "
